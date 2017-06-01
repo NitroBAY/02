@@ -121,25 +121,25 @@ function create() {
   // harpoonText.cameraOffset.setTo(40,60);
 
   // Texte de défaite
-  loseText = game.add.text(0, 0,  " ", loseStyle);
+  loseText = game.add.text(800, 350,  " ", loseStyle);
   loseText.anchor.setTo(0.5, 0.5);
   loseText.visible = false;
   loseText.fixedToCamera = true;
-  loseText.cameraOffset.setTo(400,2500);
+  loseText.cameraOffset.setTo(300,200);
 
   // Score final
   finalScoreText = game.add.text(100, 100, " ", finalScoreStyle);
   finalScoreText.anchor.setTo(0.5, 0.5);
   finalScoreText.visible = false;
   finalScoreText.fixedToCamera = true;
-  finalScoreText.cameraOffset.setTo(400,310);
+  finalScoreText.cameraOffset.setTo(300,310);
 
   // Texte pour recommencer
   restartText = game.add.text(400, 150, " ", restartStyle);
   restartText.anchor.setTo(0.5,0.5);
   restartText.visible = false;
   restartText.fixedToCamera = true;
-  restartText.cameraOffset.setTo(400, 350);
+  restartText.cameraOffset.setTo(300, 360);
 
   // Premier soin
   firstaid = game.add.sprite(100, game.world.height -100, 'firstaid');
