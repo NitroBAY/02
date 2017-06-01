@@ -45,10 +45,10 @@ function preload() {
   game.load.image('firstaid', 'assets/bulle.png');
   game.load.image('harpoon', 'assets/harpoon.png');
   game.load.image('shark', 'assets/shark.svg');
-  var harpoon = game.add.sprite(0, 0, "harpoon");
 }
 
 function create() {
+  var harpoon = game.add.sprite(0, 0, "harpoon");
   // Choix du moteur de jeu
   game.physics.startSystem(Phaser.Physics.ARCADE);
   game.physics.arcade.checkCollision.down = false;
