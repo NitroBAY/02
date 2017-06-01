@@ -290,7 +290,9 @@ function platformGenerator() {
   for (var i = 0; i < numberOfPlatform; i++) {
     var y = croppedRandom(YRange[0], YRange[1]);
     var immovable = Math.random() < .5;
-    if (immovable) y += 100;
+    console.log(y, immovable);
+    if (!immovable) y += 100;
+    console.log(y);
     platforms.push({
       x: actualX,
       y: y,
