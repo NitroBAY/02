@@ -1,7 +1,7 @@
 var game = new Phaser.Game("100", "100", Phaser.CANVAS, '', { preload: preload,
   create: create, update: update });
 var platforms, player, cursors, firstaid, weapon, gameIsOver, fireButton;
-var text, loseText, restartText, harpoonText, scoreText, finalScoreText;
+var text, loseText, restartText, harpoon, scoreText, finalScoreText;
 var shark;
 var playerHeight = 48;
 var oxygen = 800;
@@ -48,7 +48,8 @@ function preload() {
 }
 
 function create() {
-  var harpoon = game.add.sprite(0, 0, "harpoon");
+  harpoon = game.add.sprite(0, 0, "harpoon");
+
   // Choix du moteur de jeu
   game.physics.startSystem(Phaser.Physics.ARCADE);
   game.physics.arcade.checkCollision.down = false;
