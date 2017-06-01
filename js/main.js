@@ -1,6 +1,6 @@
 var game = new Phaser.Game("100", "100", Phaser.CANVAS, '', { preload: preload,
   create: create, update: update });
-var platforms, player, cursors, firstaid, weapon, gameIsOver;
+var platforms, player, cursors, firstaid, weapon, gameIsOver, fireButton;
 var text, loseText, restartText, harpoonText, scoreText, finalScoreText;
 var shark;
 var playerHeight = 48;
@@ -43,7 +43,7 @@ function preload() {
   game.load.image('star', 'assets/star.png');
   game.load.spritesheet('diver', 'assets/diver.png', 256, 256, 10);
   game.load.image('firstaid', 'assets/bulle.png');
-  game.load.image('harpoon','assets/harpoon.png');
+  game.load.image('harpoon', 'assets/harpoon.png');
   game.load.image('shark', 'assets/shark.svg');
   var harpoon = game.add.sprite(0, 0, "harpoon");
 }
@@ -72,7 +72,7 @@ function create() {
 
   // Logique du joueur
   player = game.add.sprite(32, game.world.height - 150, 'diver');
-  player.anchor.setTo(0.3, 0.3);
+  player.anchor.setTo(0.5, 0.5);
   player.scale.setTo(0.3, 0.3);
   game.physics.arcade.enable(player);
   game.camera.follow(player);
@@ -95,7 +95,7 @@ function create() {
 
   // Police
   var inventoryStyle = { font: "30px OCR A Std", fill: "white" };
-  var loseStyle = { font: "100px OCR A Std", fill: "white", marginBottom: 20};
+  var loseStyle = { font: "100px OCR A Std", fill: "white" };
   var restartStyle = { font: "32px OCR A Std", fill: "yellow"};
   var scoreStyle = { font: "35px OCR A Std", fill: "white"};
   var finalScoreStyle = { font: "45px OCR A Std", fill: "white"};
@@ -115,17 +115,17 @@ function create() {
   text.cameraOffset.setTo(40,30);
 
   // Compteur de harpons
-  harpoonText = game.add.text (500, 500, " ", inventoryStyle);
-  harpoonText.visible = true;
-  harpoonText.fixedToCamera = true;
-  harpoonText.cameraOffset.setTo(40,60);
+  // harpoonText = game.add.text (500, 500, " ", inventoryStyle);
+  // harpoonText.visible = true;
+  // harpoonText.fixedToCamera = true;
+  // harpoonText.cameraOffset.setTo(40,60);
 
   // Texte de défaite
-  loseText = game.add.text(400, 300,  " ", loseStyle);
+  loseText = game.add.text(0, 0,  " ", loseStyle);
   loseText.anchor.setTo(0.5, 0.5);
   loseText.visible = false;
   loseText.fixedToCamera = true;
-  loseText.cameraOffset.setTo(400,250);
+  loseText.cameraOffset.setTo(400,2500);
 
   // Score final
   finalScoreText = game.add.text(100, 100, " ", finalScoreStyle);
@@ -147,15 +147,16 @@ function create() {
   firstaid.scale.setTo (0.015, 0.015);
 
   // Harpon
-  harpoon = game.add.weapon(4, 'harpoon');
-  console.log(harpoon);
-  harpoon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
+  harpoon = game.add.weapon(5, 'harpoon');
+  harpoon.bulletKillType = Phaser.Weapon.KILL_CAMERA_BOUNDS;
   harpoon.bulletAngleOffset = 135;
   harpoon.bulletSpeed = 400;
-  harpoon.trackSprite(player, 80, 0, true);
+  harpoon.fireAngle = 360;
+  harpoon.trackSprite(player, 50, 0, false);
   fireButton = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
-
-
+  harpoon.visible = true;
+  harpoon.fireLimit = 5;
+  harpoon.fireRate = 800;
 }
 
 function restart (){
@@ -191,6 +192,13 @@ function update() {
   scoreText.setText(score);
 
   game.physics.arcade.collide(player, firstaid, collisionHandler);
+  game.physics.arcade.overlap(harpoon.bullets, ennemySprite, bulletEnnemy, null, this);
+
+  function bulletEnnemy (ennemySprite, harpoon) {
+    ennemySprite.kill();
+    score = score + 100;
+    console.log("Hit")
+  }
 
   var hitPlatform = game.physics.arcade.collide(player, platforms);
 
@@ -260,7 +268,6 @@ function update() {
 
   if (cursors.right.isDown && !gameIsOver)
   {
-    console.log(!gameIsOver)
     score = score+1;
   }
 
@@ -290,9 +297,7 @@ function platformGenerator() {
   for (var i = 0; i < numberOfPlatform; i++) {
     var y = croppedRandom(YRange[0], YRange[1]);
     var immovable = Math.random() < .5;
-    console.log(y, immovable);
     if (!immovable) y += 100;
-    console.log(y);
     platforms.push({
       x: actualX,
       y: y,
